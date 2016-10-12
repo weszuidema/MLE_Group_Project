@@ -35,5 +35,16 @@ if (!file.exists(rawdata)) {
 
 # Read data into R
 load(rawdata)
-save()
 
+
+# Save whole dataset, as well as countries of interest
+if (!file.exists(output_full)) {
+  
+save(WVS_Longitudinal_1981_2014_R_v2015_04_18, file = output_full)
+  
+}
+
+USA <- filter(WVS_Longitudinal_1981_2014_R_v2015_04_18, grepl("840", S003))
+UK <- filter(WVS_Longitudinal_1981_2014_R_v2015_04_18, grepl("826", S003))
+
+save(USA, UK, file = "data/wvs_states.rdata")
