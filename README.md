@@ -6,6 +6,8 @@ World Values Survey longitudinal data: http://www.worldvaluessurvey.org/WVSDocum
 
 ## Documentation
 
-1) Download data and documentation from host  
-2) Run code for data cleanup  
-3) Run code for analysis  
+1) Download data and documentation from WVS  
+2) Place zipped longitudinal data into rawdata folder and rename to  
+   rawdata.csv 
+3) Run code for data cleanup  
+4) Run code for analysis  
