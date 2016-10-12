@@ -6,3 +6,4 @@ rawdata/*.rdata
 data/*.rdata
 data/*.csv
 .Rproj.user
+.Rhistory
