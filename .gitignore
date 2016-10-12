@@ -1,5 +1,6 @@
 # We have to ignore the rawdata, documentation, and data folder since we are not authorized to redistribute the data and this is a public repo
 
-documentation/*
-rawdata/*
-data/*
+documentation/*.xls
+rawdata/*.zip
+data/*.rdata
+data/*.csv
