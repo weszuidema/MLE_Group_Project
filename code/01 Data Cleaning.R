@@ -17,16 +17,23 @@ library(tidyr)
 
 # These are just paths that could be changed if necessary
 file_dir <- "rawdata/"
+exdir_dir <- "rawdata"
 file_name <- "wvslongdata.rdata"
 zip_name <- "rawdata.zip"
 search_pattern <- ".rdata"
 rawdata <- paste(file_dir, file_name, sep = "")
 
+output_dir <- "data/"
+output_name <- "wvs_data.rdata"
+output_full <- paste(output_dir, output_name, sep = "")
+
 if (!file.exists(rawdata)) {
-  unzip(paste(file_dir, zip_name, sep = ""), exdir = "rawdata")
+  unzip(paste(file_dir, zip_name, sep = ""), exdir = exdir_dir)
   search_file <- list.files(file_dir, pattern = search_pattern)
   file.rename(paste(file_dir, search_file, sep = ""), rawdata)
 }
 
 # Read data into R
-data_orig <- load(rawdata
+load(rawdata)
+save()
+
