@@ -4,3 +4,4 @@ documentation/*.xls
 rawdata/*.zip
 data/*.rdata
 data/*.csv
+.Rproj.user
