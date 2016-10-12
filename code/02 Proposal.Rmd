@@ -1,0 +1,58 @@
+---
+title: "Proposal"
+author: "Ellen Ahlness and Wesley Zuidema"
+date: "October 12, 2016"
+output: pdf_document
+---
+
+```{r}
+# Load Packages
+library(ggplot2)
+library(dplyr)
+
+```
+
+```{r}
+# Load data
+load("data/wvs_data.rdata")
+wvs_data <- WVS_Longitudinal_1981_2014_R_v2015_04_18
+```
+
+```{r}
+# Histogram of party preference
+
+```
+
+
+```{r}
+# Histogram of IV
+```
+
+```{r fig.cap = "Age"}
+# Histogram of Age
+ggplot(filter(wvs_data, X003 > 0)) +
+  geom_histogram(aes(X003), binwidth = 1) + 
+  labs(x = "Age", y = "Count")
+```
+
+```{r}
+# Histogram of income
+ggplot(filter(wvs_data, X047 > 0)) +
+  geom_histogram(aes(X047), binwidth = 1) + 
+  labs(x = "Income Level", y = "Count")
+```
+
+```{r}
+# Histogram of gender
+ggplot(filter(wvs_data, X001 > 0)) +
+  geom_histogram(aes(X001), binwidth = 1) + 
+  labs(x = "Sex", y = "Count")
+```
+
+```{r}
+# Histogram of Marital Status
+ggplot(filter(wvs_data, X007 > 0)) +
+  geom_histogram(aes(X007), binwidth = 1) + 
+  labs(x = "Marital Status", y = "Count")
+```
+
