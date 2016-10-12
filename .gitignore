@@ -2,6 +2,7 @@
 
 documentation/*.xls
 rawdata/*.zip
+rawdata/*.rdata
 data/*.rdata
 data/*.csv
 .Rproj.user
