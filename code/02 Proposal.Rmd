@@ -1,14 +1,31 @@
 ---
-title: "Proposal"
+title: "MLE Proposal"
 author: "Ellen Ahlness and Wesley Zuidema"
-date: "October 12, 2016"
-output: pdf_document
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  pdf_document:
+    citation_package: natbib
+    keep_tex: true
+    fig_caption: true
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+header-includes:
+- \usepackage{setspace}
+- \setlength\parindent{24pt}
 ---
+
+NOTE: We apologize for the random placement of our figures. We are still mastering R Markdown and lacked the experience to get everything on the correct pages.
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, cache = TRUE)
 ```
+Our project will explore trends in the relationship between individual values and political party preferences over time. In particular, we are interested in the question of whether individuals whose primary political concern is immigration will be more drawn to far right parties than individuals who are primarily concerned with other political issues[^1]. The data come from the World Values Survey[^2]. Our project focuses on using professed individual values to explain an affinity for far-right parties in Europe and the United States. Specifically, we are interested in how an individual describes themselves (E047-E056), their favored immigration policy (E143), what they believe the most serious problems facing the world are (E238-E239_ES), and what they believe the most serious problems facing their state are (E240-E241_ES). We hypothesize, following in the footsteps of other research, that an outsized concern with immigration will make an individual more likely to prefer far-right parties.  
 
+[^1]: Berning, Carl C., and Elmar Schlueter. 2016. “The Dynamics of Radical Right-Wing Populist Party Preferences and Perceived Group Threat: A Comparative Panel Analysis of Three Competing Hypotheses in the Netherlands and Germany.” Social Science Research 55: 83–93.  
+[^2]: World Values Survey. http://www.worldvaluessurvey.org/WVSDocumentationWVL.jsp  
+
+All our data is measured at the individual level. Our independent (treatment) variables, measured by questions about a person’s primary policy concerns, are categorical; there is no rank among what individuals believe is the biggest threat against the world and their state. The dependent variable, party identification, is ordinal. While there is no inherent rank in political party preference, they can be organized on a scale from ‘far left’ to ‘far right,’ where far right parties are ultra-nationalist in character that prefer, among other things, a radical reduction in the flow of immigration and a nationalist challenge to secular multiculturalism. Other covariates of interest that we will use as controls are gender, income, age, and marital status, all of which have been shown to play a role in party identification and preference. 
 
 ```{r}
 # Load Packages
@@ -22,7 +39,11 @@ load("../data/wvs_data.rdata")
 wvs_data <- WVS_Longitudinal_1981_2014_R_v2015_04_18
 ```
 
-```{r fig.cap = "Immigration Policy"}
+Some of our covariates of interest appear to be normally distributed. In particular, immigration policy preferences seem to be distributed normally around the mean. We think it is likely that the variables that use ranked, discrete scales (e.g., 1 to 10) will be distributed normally due to our large sample size and the central limit theorem. Nevertheless, it is possible that a different distribution might describe the data 
+more accurately. For instance, acceptance of change seems to have the majority of responses fall at either extreme or at the exact median. We are not sure at this point what distribution best approximates this data. As of right now, we have not cleaned the data enough to provide a histogram of party preferences, but we expect that any parties ranked from left to right will be distributed normally around the centrist parties. If a society is particularly polarized, that assumption may prove wrong.  
+
+
+```{r fig.cap = "Immigration Policy", fig.height=4, fig.width=8}
 # Histogram of IV - Responses to Change
 ggplot(filter(wvs_data, E143 > 0)) +
   geom_histogram(aes(E143), binwidth = 1) + 
@@ -30,7 +51,7 @@ ggplot(filter(wvs_data, E143 > 0)) +
   labs(x = "Immigration Policy (1 - 5, where 1 is most open and 5 is most restrictive)", y = "Count")
 ```
 
-```{r fig.cap = "Acceptance of Change"}
+```{r fig.cap = "Acceptance of Change", fig.height=4, fig.width=8}
 # Histogram of IV - Responses to Change
 ggplot(filter(wvs_data, E047 > 0)) +
   geom_histogram(aes(E047), binwidth = 1) + 
@@ -38,7 +59,13 @@ ggplot(filter(wvs_data, E047 > 0)) +
   labs(x = "Acceptance of Change (1 - 10)", y = "Count")
 ```
 
-```{r fig.cap = "Age"}
+With our categorical and ordinal data, two methods stand out for analysis. The first is logistic regression, and the second is non-parametric correlation. Since our outcome variable is categorical, we will need to use a model that is appropriate for discrete outcome variables. At this point, we will need to get a better grasp of the data before we are sure which model will be appropriate.
+
+\pagebreak
+
+The covariates of interest we will use as controls follow a number of their own unique distributions. Age seems to follow a Poisson distribution. Income level seems to be distributed fairly normally with a long right tail, respresenting outliers who make exceptionally large amounts of money. Sex seems to follow the Bernoulli distribution, although our data do not include individuals who intersex or who do not identify with the gender assigned at birth. While most individuals are either single or never married, there are a significant number of individuals who are divorced, widowed, or living with a party as if they were married. Our analysis will need to treat this as a categorical variable without rank.
+
+```{r fig.cap = "Age", fig.height=4, fig.width=8}
 # Histogram of Age
 ggplot(filter(wvs_data, X003 > 0)) +
   geom_histogram(aes(X003), binwidth = 1) + 
@@ -46,7 +73,8 @@ ggplot(filter(wvs_data, X003 > 0)) +
   labs(x = "Age", y = "Count")
 ```
 
-```{r fig.cap = "Income Level"}
+
+```{r fig.cap = "Income Level", fig.height=4, fig.width=8}
 # Histogram of income
 ggplot(filter(wvs_data, X047 > 0)) +
   geom_histogram(aes(X047), binwidth = 1) + 
@@ -54,7 +82,9 @@ ggplot(filter(wvs_data, X047 > 0)) +
   labs(x = "Income Level (1 - 10)", y = "Count")
 ```
 
-```{r fig.cap = "Sex"}
+
+
+```{r fig.cap = "Sex", fig.height=4, fig.width=8}
 # Histogram of gender
 ggplot(filter(wvs_data, X001 > 0)) +
   geom_histogram(aes(X001), binwidth = 1) + 
@@ -62,7 +92,9 @@ ggplot(filter(wvs_data, X001 > 0)) +
   labs(x = "Sex (1 = Male, 2 = Female)", y = "Count")
 ```
 
-```{r fig.cap = "Marital Status"}
+
+
+```{r fig.cap = "Marital Status", fig.height=4, fig.width=8}
 # Histogram of Marital Status
 ggplot(filter(wvs_data, X007 > 0)) +
   geom_histogram(aes(X007), binwidth = 1) + 
