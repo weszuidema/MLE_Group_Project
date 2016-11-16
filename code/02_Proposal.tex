@@ -1,0 +1,206 @@
+\documentclass[11pt,]{article}
+\usepackage[]{mathpazo}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={MLE Proposal},
+            pdfauthor={Ellen Ahlness and Wesley Zuidema},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{MLE Proposal}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Ellen Ahlness and Wesley Zuidema}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{October 13, 2016}
+
+
+\usepackage{setspace}
+\setlength\parindent{24pt}
+
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\begin{document}
+\maketitle
+
+NOTE: We apologize for the random placement of our figures. We are still
+mastering R Markdown and lacked the experience to get everything on the
+correct pages.
+
+Our project will explore trends in the relationship between individual
+values and political party preferences over time. In particular, we are
+interested in the question of whether individuals whose primary
+political concern is immigration will be more drawn to far right parties
+than individuals who are primarily concerned with other political
+issues\footnote{Berning, Carl C., and Elmar Schlueter. 2016. ``The
+  Dynamics of Radical Right-Wing Populist Party Preferences and
+  Perceived Group Threat: A Comparative Panel Analysis of Three
+  Competing Hypotheses in the Netherlands and Germany.'' Social Science
+  Research 55: 83--93.}. The data come from the World Values
+Survey\footnote{World Values Survey.
+  \url{http://www.worldvaluessurvey.org/WVSDocumentationWVL.jsp}}. Our
+project focuses on using professed individual values to explain an
+affinity for far-right parties in Europe and the United States.
+Specifically, we are interested in how an individual describes
+themselves (E047-E056), their favored immigration policy (E143), what
+they believe the most serious problems facing the world are
+(E238-E239\_ES), and what they believe the most serious problems facing
+their state are (E240-E241\_ES). We hypothesize, following in the
+footsteps of other research, that an outsized concern with immigration
+will make an individual more likely to prefer far-right parties.
+
+All our data is measured at the individual level. Our independent
+(treatment) variables, measured by questions about a person's primary
+policy concerns, are categorical; there is no rank among what
+individuals believe is the biggest threat against the world and their
+state. The dependent variable, party identification, is ordinal. While
+there is no inherent rank in political party preference, they can be
+organized on a scale from `far left' to `far right,' where far right
+parties are ultra-nationalist in character that prefer, among other
+things, a radical reduction in the flow of immigration and a nationalist
+challenge to secular multiculturalism. Other covariates of interest that
+we will use as controls are gender, income, age, and marital status, all
+of which have been shown to play a role in party identification and
+preference.
+
+Some of our covariates of interest appear to be normally distributed. In
+particular, immigration policy preferences seem to be distributed
+normally around the mean. We think it is likely that the variables that
+use ranked, discrete scales (e.g., 1 to 10) will be distributed normally
+due to our large sample size and the central limit theorem.
+Nevertheless, it is possible that a different distribution might
+describe the data more accurately. For instance, acceptance of change
+seems to have the majority of responses fall at either extreme or at the
+exact median. We are not sure at this point what distribution best
+approximates this data. As of right now, we have not cleaned the data
+enough to provide a histogram of party preferences, but we expect that
+any parties ranked from left to right will be distributed normally
+around the centrist parties. If a society is particularly polarized,
+that assumption may prove wrong.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{02_Proposal_files/figure-latex/unnamed-chunk-3-1.pdf}
+\caption{Immigration Policy}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{02_Proposal_files/figure-latex/unnamed-chunk-4-1.pdf}
+\caption{Acceptance of Change}
+\end{figure}
+
+With our categorical and ordinal data, two methods stand out for
+analysis. The first is logistic regression, and the second is
+non-parametric correlation. Since our outcome variable is categorical,
+we will need to use a model that is appropriate for discrete outcome
+variables. At this point, we will need to get a better grasp of the data
+before we are sure which model will be appropriate.
+
+\pagebreak
+
+The covariates of interest we will use as controls follow a number of
+their own unique distributions. Age seems to follow a Poisson
+distribution. Income level seems to be distributed fairly normally with
+a long right tail, respresenting outliers who make exceptionally large
+amounts of money. Sex seems to follow the Bernoulli distribution,
+although our data do not include individuals who intersex or who do not
+identify with the gender assigned at birth. While most individuals are
+either single or never married, there are a significant number of
+individuals who are divorced, widowed, or living with a party as if they
+were married. Our analysis will need to treat this as a categorical
+variable without rank.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{02_Proposal_files/figure-latex/unnamed-chunk-5-1.pdf}
+\caption{Age}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{02_Proposal_files/figure-latex/unnamed-chunk-6-1.pdf}
+\caption{Income Level}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{02_Proposal_files/figure-latex/unnamed-chunk-7-1.pdf}
+\caption{Sex}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{02_Proposal_files/figure-latex/unnamed-chunk-8-1.pdf}
+\caption{Marital Status}
+\end{figure}
+
+\end{document}
