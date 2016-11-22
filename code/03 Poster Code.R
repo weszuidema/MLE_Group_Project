@@ -61,15 +61,20 @@ wvs_recode <- wvs_filter %>%
   filter(age > 0) %>%
   filter(incomelevel > 0) %>%
   filter(female > 0) %>%
-  filter(maritalstatus > 0)
+  filter(maritalstatus > 0) %>%
+  filter(religious > 0) %>%
+  filter(worldcitizen > 0) %>%
+  filter(nationalpride > 0) %>%
+  filter(infofriends > 0)
+  
 
 wvs_final <- wvs_recode %>%
-  select(wave, country, farrightpref, immigrationpref, age, incomelevel, female, maritalstatus)
+  select(wave, country, farrightpref, immigrationpref, age, incomelevel, female, maritalstatus, religious, worldcitizen, nationalpride, infofriends)
 
 
 # Build model and estimate with least squares first for reference
 model_a <-  farrightpref ~ immigrationpref + age + incomelevel + female
-model_b <-  farrightpref ~ immigrationpref + age + incomelevel + female + maritalstatus
+model_b <-  farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride
 
 ls.result <- lm(model_ls, wvs_final)
 
