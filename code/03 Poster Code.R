@@ -76,7 +76,7 @@ wvs_final <- wvs_recode %>%
 model_a <-  farrightpref ~ immigrationpref + age + incomelevel + female
 model_b <-  farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride
 
-ls.result <- lm(model_ls, wvs_final)
+ls.result <- lm(model_b, wvs_final)
 
 
 # Binary logit model
@@ -96,7 +96,7 @@ llk.logit <- function(param,y,xcovariates) {
 
 # Define the parameters we will use for optim
 y <-  wvs_final$farrightpref
-xcovariates <- cbind(wvs_final$immigrationpref, wvs_final$age, wvs_final$incomelevel, wvs_final$female)
+xcovariates <- cbind(wvs_final$immigrationpref, wvs_final$age, wvs_final$incomelevel, wvs_final$female, wvs_final$religious, wvs_final$worldcitizen, wvs_final$nationalpride)
 stval <- c(coef(ls.result))
 
 # Run optim
@@ -112,8 +112,7 @@ ll <- -logit.farright$value             # likelihood at maximum
 logit.table <- rbind(pe, se)
 logit.table <- t(logit.table)
 colnames(logit.table) <- c("Estimate", "Standard Error")
-rownames(logit.table) <- c("(Intercept)", "Immigration Preference", "Age", "Income Level", 
-                             "Female")
+rownames(logit.table) <- c("(Intercept)", "Immigration Preference", "Age", "Income Level", "Female", "Religious", "World Citizen", "National Pride")
 
 # Simulation
 
