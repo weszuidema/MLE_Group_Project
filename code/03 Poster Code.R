@@ -16,6 +16,7 @@ library(RColorBrewer)    # For nice colors
 source("binaryGOF.R")    # Percent correctly predicted and concordance indexes
 source("binPredict.R")   # Code for making predicted vs actual plots
 library(simcf)
+library(xtable)
 library(dplyr)
 select <- dplyr::select
 
@@ -84,12 +85,12 @@ wvs_final <- wvs_recode %>%
 
 
 # Build model and estimate with least squares first for reference
-model_a <-  farrightpref ~ immigrationpref + age + incomelevel + female
-model_b <-  farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride
-model_c <- farrightpref ~ immigrationpref + age + incomelevel + female + married + domesticpartner + divorced + separated + widowed
-model_d <- farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed
+model_a <-  farrightpref ~ immigrationpref #Binary Model
+model_b <-  farrightpref ~ immigrationpref + religious + worldcitizen + nationalpride #Preferences
+model_c <- farrightpref ~ age + incomelevel + female + married + domesticpartner + divorced + separated + widowed #Characteristics
+model_d <- farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed #Full Model
 
-ls.result <- lm(model_b, wvs_final)
+ls.result <- lm(model_d, wvs_final)
 
 
 # Binary logit model
@@ -109,7 +110,7 @@ llk.logit <- function(param,y,xcovariates) {
 
 # Define the parameters we will use for optim
 y <-  wvs_final$farrightpref
-xcovariates <- cbind(wvs_final$immigrationpref, wvs_final$age, wvs_final$incomelevel, wvs_final$female, wvs_final$religious, wvs_final$worldcitizen, wvs_final$nationalpride)
+xcovariates <- cbind(wvs_final$immigrationpref, wvs_final$age, wvs_final$incomelevel, wvs_final$female, wvs_final$religious, wvs_final$worldcitizen, wvs_final$nationalpride, wvs_final$married, wvs_final$domesticpartner, wvs_final$divorced, wvs_final$separated, wvs_final$widowed)
 stval <- c(coef(ls.result))
 
 # Run optim
@@ -125,10 +126,9 @@ ll <- -logit.farright$value             # likelihood at maximum
 logit.table <- rbind(pe, se)
 logit.table <- t(logit.table)
 colnames(logit.table) <- c("Estimate", "Standard Error")
-rownames(logit.table) <- c("(Intercept)", "Immigration Preference", "Age", "Income Level", "Female", "Religious", "World Citizen", "National Pride")
+rownames(logit.table) <- c("(Intercept)", "Immigration Preference", "Age", "Income Level", "Female", "Religious", "World Citizen", "National Pride", "Married", "Domestic Partner", "Divorced", "Separated", "Widowed")
 
-# Roc plots
-# GLM for plotting
+# GLM for comparing models
 glm_a <- glm(model_a, family = binomial, data = wvs_final)
 glm_b <- glm(model_b, family = binomial, data = wvs_final)
 glm_c <- glm(model_c, family = binomial, data = wvs_final)
@@ -138,17 +138,30 @@ col <- brewer.pal(5, "Set1")
 blue <- col[2]
 orange <- col[5]
 
-binnedM1 <- binPredict(glm_a, col=blue, label="M1", quantiles=TRUE, bins = 5)
-binnedM2 <- binPredict(glm_d, col=orange, label="M2", quantiles=TRUE, bins = 5)
-plot(binnedM1, binnedM2, display="roc", thresholds=c(0.9, 0.8, 0.7, 0.6), labx=0.35)
-plot(binnedM1, binnedM2, display="avp", hide=TRUE, labx=0.35)
+## Goodness of Fit Tests
+# Length of each model
+k.m1 <- length(glm_a$coefficients)
+k.m2 <- length(glm_b$coefficients)
+k.m3 <- length(glm_c$coefficients)
+k.m4 <- length(glm_d$coefficients)
 
-# Separation plots
-separationplot(pred=glm_a$fitted.values, actual=glm_a$y)
-separationplot(pred=glm_b$fitted.values, actual=glm_b$y)
-separationplot(pred=glm_c$fitted.values, actual=glm_b$y)
-separationplot(pred=glm_d$fitted.values, actual=glm_b$y)
+# Percent Correctly Predicted
+pcp.null <- pcp.glm(glm_a, wvs_final$farrightpref, type="null")
+pcp.m1 <- pcp.glm(glm_a, wvs_final$farrightpref, type="model")
+pcp.m2 <- pcp.glm(glm_d, wvs_final$farrightpref, type="model")
+pcpi.m1 <- pcp.glm(glm_a, wvs_final$farrightpref, type="improve")
+pcpi.m2 <- pcp.glm(glm_d, wvs_final$farrightpref, type="improve")
 
+# Regression Table
+glm_a_sum <- summary(glm_a)
+glm_a_coef <- glm_a_sum$coefficients
+table_a <- glm_a_coef[, 1:2]
+glm_d_sum <- summary(glm_d)
+glm_d_coef <- glm_d_sum$coefficients
+table_d <- glm_d_coef[, 1:2]
+
+       
+## Simulations
 # Model parameters
 pe.glm <- glm_d$coefficients  # point estimates
 vc.glm <- vcov(glm_d)         # var-cov matrix
@@ -158,7 +171,7 @@ sims <- 10000
 simbetas <- mvrnorm(sims, pe.glm, vc.glm)
 
 # Create example counterfactuals
-xhyp <- cfMake(model_d, wvs_final, nscen=6)
+xhyp <- cfMake(model_d, wvs_final, nscen=10)
 
 xhyp <- cfName(xhyp,"Opposes Immigration", scen=1)
 xhyp <- cfChange(xhyp, "immigrationpref", x=4, xpre=1, scen=1)
@@ -183,6 +196,18 @@ xhyp <- cfChange(xhyp, "age",
                  x=mean(na.omit(wvs_final$age))-sd(na.omit(wvs_final$age)),
                  xpre=mean(na.omit(wvs_final$age)),
                  scen=6)
+
+xhyp <- cfName(xhyp, "Male", scen=7)
+xhyp <- cfChange(xhyp, "female", x=1, xpre=2, scen=7)
+
+xhyp <- cfName(xhyp, "Income (1st to 3rd QT)", scen=8)
+xhyp <- cfChange(xhyp, "incomelevel", x=7, xpre=3, scen=8)
+
+xhyp <- cfName(xhyp, "Widowed", scen=9)
+xhyp <- cfChange(xhyp, "widowed", x=1, xpre=0, scen=9)
+
+xhyp <- cfName(xhyp, "Divorced", scen=10)
+xhyp <- cfChange(xhyp, "female", x=1, xpre=0, scen=10)
 
 # Simulate expected probabilities for all scenarios
 logitsims <- logitsimev(xhyp, simbetas, ci=0.95)
@@ -209,9 +234,11 @@ tile(trace1,
      limits = c(0,0.5),
      gridlines = list(type="xt"),
      topaxis=list(add=TRUE, at=c(0,0.1,0.2,0.3,0.4,0.5)),
-     plottitle=list(labels="Probability of far right support"),
+     plottitle=list(labels="Expected Values"),
+     xaxistitle=list(labels="Probability of far right support"),
      width=list(spacer=3),
-     height = list(plottitle=3,xaxistitle=3.5,topaxistitle=3.5)
+     height = list(plottitle=3,xaxistitle=3.5,topaxistitle=3.5),
+     output = list(file="figures/expectedvalues")
 )
 
 # Plot First Difference
@@ -235,7 +262,48 @@ tile(trace2,
      limits = c(-.40,0.25),
      gridlines = list(type="xt"),
      topaxis=list(add=TRUE, at=c(-.3,-.2,-.1,0,0.1,0.2)),
-     plottitle=list(labels="Probability of far right support"),
+     plottitle=list(labels="First Differences"),
+     xaxistitle=list(labels="Probability of far right support"),
      width=list(spacer=3),
-     height = list(plottitle=3,xaxistitle=3.5,topaxistitle=3.5)
+     height = list(plottitle=3,xaxistitle=3.5,topaxistitle=3.5),
+     output=list(file="figures/firstdifferences")
 )
+
+### Cross Validation
+loocv <- function (obj) {
+  data <- obj$data
+  m <- dim(data)[1]
+  form <- formula(obj)
+  fam <- obj$family$family
+  loo <- rep(NA, m)
+  for (i in 1:m) {
+    i.glm <- glm(form, data = data[-i, ], family = fam)
+    loo[i] <- predict(i.glm, newdata = data[i,], family = fam, type = "response")
+  }
+  loo
+}
+
+# LOOCV for models 1 and 2
+predCV_a <- loocv(glm_a)
+predCV_b <- loocv(glm_b)
+predCV_c <- loocv(glm_c)
+predCV_d <- loocv(glm_d)
+
+# Make cross-validated AVP and ROC plots; note use of newpred input in binPredict
+binnedM1cv <- binPredict(glm_a, newpred=predCV_a, col=blue, label="M1: Binary Model", quantiles=TRUE, bins = 5)
+binnedM4cv <- binPredict(glm_d, newpred=predCV_d, col=orange, label="M4: Full Model", quantiles=TRUE, bins = 5)
+
+binnedM2cv <- binPredict(glm_b, newpred=predCV_b, col=blue, label="M2: Preferences Only", quantiles=TRUE, bins = 5)
+binnedM3cv <- binPredict(glm_c, newpred=predCV_c, col=orange, label="M3: Characteristics Only", quantiles=TRUE, bins = 5)
+
+plot(binnedM1cv, binnedM4cv, display=c("roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/ROC1 - Binary vs FULL")
+
+plot(binnedM1cv, binnedM4cv, display=c("avp"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/AVP1 - Binary vs FULL")
+
+plot(binnedM2cv, binnedM3cv, display=c("roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/ROC2 - Prefs vs Characteristics")
+
+plot(binnedM2cv, binnedM3cv, display=c("avp"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/AVP2 - Prefs vs Characteristics")
