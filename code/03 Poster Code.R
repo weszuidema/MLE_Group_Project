@@ -77,20 +77,24 @@ wvs_recode <- wvs_filter %>%
          divorced = ifelse(maritalstatus == 3, 1, 0),
          separated = ifelse(maritalstatus == 4, 1, 0),
          widowed = ifelse(maritalstatus == 5, 1, 0),
-         nevermarried = ifelse(maritalstatus == 6, 1, 0))
+         nevermarried = ifelse(maritalstatus == 6, 1, 0),
+         australia = ifelse(country == 36, 1, 0),
+         hungary = ifelse(country == 348, 1, 0))
   
 
 wvs_final <- wvs_recode %>%
-  select(wave, country, farrightpref, immigrationpref, age, incomelevel, female, maritalstatus, religious, worldcitizen, nationalpride, infofriends, married, domesticpartner, divorced, separated, widowed, nevermarried)
+  select(wave, country, farrightpref, immigrationpref, age, incomelevel, female, maritalstatus, religious, worldcitizen, nationalpride, infofriends, married, domesticpartner, divorced, separated, widowed, nevermarried, australia, hungary)
 
 
 # Build model and estimate with least squares first for reference
-model_a <-  farrightpref ~ immigrationpref #Binary Model
-model_b <-  farrightpref ~ immigrationpref + religious + worldcitizen + nationalpride #Preferences
-model_c <- farrightpref ~ age + incomelevel + female + married + domesticpartner + divorced + separated + widowed #Characteristics
-model_d <- farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed #Full Model
+# All models include country fixed effects, Indonesia is baseline
+model_a <-  farrightpref ~ immigrationpref + australia + hungary #Binary Model
+model_b <-  farrightpref ~ immigrationpref + religious + worldcitizen + nationalpride + australia + hungary#Preferences
+model_c <- farrightpref ~ age + incomelevel + female + married + domesticpartner + divorced + separated + widowed + australia + hungary #Characteristics
+model_d <- farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed + australia + hungary #Full Model
+model_optim <- farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed + australia + hungary #Full Model
 
-ls.result <- lm(model_d, wvs_final)
+ls.result <- lm(model_optim, wvs_final)
 
 
 # Binary logit model
@@ -110,7 +114,7 @@ llk.logit <- function(param,y,xcovariates) {
 
 # Define the parameters we will use for optim
 y <-  wvs_final$farrightpref
-xcovariates <- cbind(wvs_final$immigrationpref, wvs_final$age, wvs_final$incomelevel, wvs_final$female, wvs_final$religious, wvs_final$worldcitizen, wvs_final$nationalpride, wvs_final$married, wvs_final$domesticpartner, wvs_final$divorced, wvs_final$separated, wvs_final$widowed)
+xcovariates <- cbind(wvs_final$immigrationpref, wvs_final$age, wvs_final$incomelevel, wvs_final$female, wvs_final$religious, wvs_final$worldcitizen, wvs_final$nationalpride, wvs_final$married, wvs_final$domesticpartner, wvs_final$divorced, wvs_final$separated, wvs_final$widowed, wvs_final$australia, wvs_final$hungary)
 stval <- c(coef(ls.result))
 
 # Run optim
@@ -126,7 +130,7 @@ ll <- -logit.farright$value             # likelihood at maximum
 logit.table <- rbind(pe, se)
 logit.table <- t(logit.table)
 colnames(logit.table) <- c("Estimate", "Standard Error")
-rownames(logit.table) <- c("(Intercept)", "Immigration Preference", "Age", "Income Level", "Female", "Religious", "World Citizen", "National Pride", "Married", "Domestic Partner", "Divorced", "Separated", "Widowed")
+rownames(logit.table) <- c("(Intercept)", "Immigration Preference", "Age", "Income Level", "Female", "Religious", "World Citizen", "National Pride", "Married", "Domestic Partner", "Divorced", "Separated", "Widowed", "Australia", "Hungary")
 
 # GLM for comparing models
 glm_a <- glm(model_a, family = binomial, data = wvs_final)
@@ -238,7 +242,7 @@ tile(trace1,
      xaxistitle=list(labels="Probability of far right support"),
      width=list(spacer=3),
      height = list(plottitle=3,xaxistitle=3.5,topaxistitle=3.5),
-     output = list(file="figures/expectedvalues")
+     output = list(file="figures/expected_values")
 )
 
 # Plot First Difference
