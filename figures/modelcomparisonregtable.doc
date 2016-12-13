@@ -1,0 +1,274 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">Statistical models</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"><b></b></th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"><b>Model 1</b></th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"><b>Model 2</b></th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"><b>Model 3</b></th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"><b>Model 4</b></th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">(Intercept)</td>
+<td style="padding-right: 12px; border: none;">-2.33</td>
+<td style="padding-right: 12px; border: none;">-2.00</td>
+<td style="padding-right: 12px; border: none;">-1.97</td>
+<td style="padding-right: 12px; border: none;">-1.65</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.10)</td>
+<td style="padding-right: 12px; border: none;">(0.13)</td>
+<td style="padding-right: 12px; border: none;">(0.14)</td>
+<td style="padding-right: 12px; border: none;">(0.19)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">immigrationpref</td>
+<td style="padding-right: 12px; border: none;">0.02</td>
+<td style="padding-right: 12px; border: none;">0.01</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">0.01</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.03)</td>
+<td style="padding-right: 12px; border: none;">(0.03)</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.03)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">australia</td>
+<td style="padding-right: 12px; border: none;">0.32</td>
+<td style="padding-right: 12px; border: none;">0.34</td>
+<td style="padding-right: 12px; border: none;">0.30</td>
+<td style="padding-right: 12px; border: none;">0.34</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.07)</td>
+<td style="padding-right: 12px; border: none;">(0.08)</td>
+<td style="padding-right: 12px; border: none;">(0.08)</td>
+<td style="padding-right: 12px; border: none;">(0.09)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">hungary</td>
+<td style="padding-right: 12px; border: none;">1.91</td>
+<td style="padding-right: 12px; border: none;">1.95</td>
+<td style="padding-right: 12px; border: none;">1.85</td>
+<td style="padding-right: 12px; border: none;">1.92</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.07)</td>
+<td style="padding-right: 12px; border: none;">(0.08)</td>
+<td style="padding-right: 12px; border: none;">(0.08)</td>
+<td style="padding-right: 12px; border: none;">(0.09)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">religious</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">-0.18</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">-0.18</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.04)</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.04)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">worldcitizen</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">0.04</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">0.03</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.03)</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.03)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">nationalpride</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">-0.11</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">-0.11</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.04)</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.04)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">age</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">0.00</td>
+<td style="padding-right: 12px; border: none;">-0.00</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.00)</td>
+<td style="padding-right: 12px; border: none;">(0.00)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">incomelevel</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">-0.01</td>
+<td style="padding-right: 12px; border: none;">-0.01</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.01)</td>
+<td style="padding-right: 12px; border: none;">(0.01)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">female</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">-0.07</td>
+<td style="padding-right: 12px; border: none;">-0.10</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.05)</td>
+<td style="padding-right: 12px; border: none;">(0.05)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">education</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">-0.11</td>
+<td style="padding-right: 12px; border: none;">-0.10</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.03)</td>
+<td style="padding-right: 12px; border: none;">(0.03)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">married</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">0.04</td>
+<td style="padding-right: 12px; border: none;">0.01</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.07)</td>
+<td style="padding-right: 12px; border: none;">(0.07)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">domesticpartner</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">-0.01</td>
+<td style="padding-right: 12px; border: none;">-0.01</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.10)</td>
+<td style="padding-right: 12px; border: none;">(0.10)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">divorced</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">0.09</td>
+<td style="padding-right: 12px; border: none;">0.09</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.12)</td>
+<td style="padding-right: 12px; border: none;">(0.12)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">separated</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">-0.01</td>
+<td style="padding-right: 12px; border: none;">-0.02</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.18)</td>
+<td style="padding-right: 12px; border: none;">(0.18)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">widowed</td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">0.08</td>
+<td style="padding-right: 12px; border: none;">0.03</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(0.11)</td>
+<td style="padding-right: 12px; border: none;">(0.11)</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">AIC</td>
+<td style="border-top: 1px solid black;">10698.68</td>
+<td style="border-top: 1px solid black;">10672.47</td>
+<td style="border-top: 1px solid black;">10697.02</td>
+<td style="border-top: 1px solid black;">10675.63</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">BIC</td>
+<td style="padding-right: 12px; border: none;">10728.35</td>
+<td style="padding-right: 12px; border: none;">10724.40</td>
+<td style="padding-right: 12px; border: none;">10786.04</td>
+<td style="padding-right: 12px; border: none;">10794.32</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">Log Likelihood</td>
+<td style="padding-right: 12px; border: none;">-5345.34</td>
+<td style="padding-right: 12px; border: none;">-5329.24</td>
+<td style="padding-right: 12px; border: none;">-5336.51</td>
+<td style="padding-right: 12px; border: none;">-5321.82</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">Deviance</td>
+<td style="padding-right: 12px; border: none;">10690.68</td>
+<td style="padding-right: 12px; border: none;">10658.47</td>
+<td style="padding-right: 12px; border: none;">10673.02</td>
+<td style="padding-right: 12px; border: none;">10643.63</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">Num. obs.</td>
+<td style="border-bottom: 2px solid black;">12310</td>
+<td style="border-bottom: 2px solid black;">12310</td>
+<td style="border-bottom: 2px solid black;">12310</td>
+<td style="border-bottom: 2px solid black;">12310</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="6"><span style="font-size:0.8em"></span></td>
+</tr>
+</table>
