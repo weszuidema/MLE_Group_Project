@@ -17,6 +17,7 @@ source("binaryGOF.R")    # Percent correctly predicted and concordance indexes
 source("binPredict.R")   # Code for making predicted vs actual plots
 library(simcf)
 library(xtable)
+library(VGAM)
 library(dplyr)
 select <- dplyr::select
 
@@ -32,6 +33,7 @@ wvs_data$age <- wvs_data$X003
 wvs_data$incomelevel <- wvs_data$X047
 wvs_data$female <- wvs_data$X001
 wvs_data$maritalstatus <- wvs_data$X007
+wvs_data$education <- wvs_data$X025R
 
 wvs_data$religious <- wvs_data$F034
 wvs_data$worldcitizen <- wvs_data$G019
@@ -68,6 +70,7 @@ wvs_recode <- wvs_filter %>%
   filter(incomelevel > 0) %>%
   filter(female > 0) %>%
   filter(maritalstatus > 0) %>%
+  filter(education > 0) %>%
   filter(religious > 0) %>%
   filter(worldcitizen > 0) %>%
   filter(nationalpride > 0) %>%
@@ -83,15 +86,18 @@ wvs_recode <- wvs_filter %>%
   
 
 wvs_final <- wvs_recode %>%
-  select(wave, country, farrightpref, immigrationpref, age, incomelevel, female, maritalstatus, religious, worldcitizen, nationalpride, infofriends, married, domesticpartner, divorced, separated, widowed, nevermarried, australia, hungary)
+  select(wave, country, farrightpref, immigrationpref, age, incomelevel, female, maritalstatus, education, religious, worldcitizen, nationalpride, infofriends, married, domesticpartner, divorced, separated, widowed, nevermarried, australia, hungary)
 
 
 # Build model and estimate with least squares first for reference
 # All models include country fixed effects, Indonesia is baseline
 model_a <-  farrightpref ~ immigrationpref + australia + hungary #Binary Model
 model_b <-  farrightpref ~ immigrationpref + religious + worldcitizen + nationalpride + australia + hungary#Preferences
-model_c <- farrightpref ~ age + incomelevel + female + married + domesticpartner + divorced + separated + widowed + australia + hungary #Characteristics
-model_d <- farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed + australia + hungary #Full Model
+model_c <- farrightpref ~ age + incomelevel + female + education + married + domesticpartner + divorced + separated + widowed + australia + hungary #Characteristics
+model_d <- farrightpref ~ immigrationpref + age + incomelevel + female + education + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed + australia + hungary #Full Model
+
+model_state_specific <- model_d <- farrightpref ~ immigrationpref + age + incomelevel + female + education + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed
+
 model_optim <- farrightpref ~ immigrationpref + age + incomelevel + female + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed + australia + hungary #Full Model
 
 ls.result <- lm(model_optim, wvs_final)
@@ -137,6 +143,16 @@ glm_a <- glm(model_a, family = binomial, data = wvs_final)
 glm_b <- glm(model_b, family = binomial, data = wvs_final)
 glm_c <- glm(model_c, family = binomial, data = wvs_final)
 glm_d <- glm(model_d, family = binomial, data = wvs_final)
+
+glm_indonesia <- glm(model_state_specific, family = binomial, data = filter(wvs_final, country == 360))
+glm_hungary <- glm(model_state_specific, family = binomial, data = filter(wvs_final, country == 348))
+glm_australia <- glm(model_state_specific, family = binomial, data = filter(wvs_final, country == 36))
+
+summary(glm_d)
+
+summary(glm_indonesia)
+summary(glm_hungary)
+summary(glm_australia)
 
 col <- brewer.pal(5, "Set1")
 blue <- col[2]
@@ -294,20 +310,36 @@ predCV_c <- loocv(glm_c)
 predCV_d <- loocv(glm_d)
 
 # Make cross-validated AVP and ROC plots; note use of newpred input in binPredict
-binnedM1cv <- binPredict(glm_a, newpred=predCV_a, col=blue, label="M1: Binary Model", quantiles=TRUE, bins = 5)
+binnedM1cv <- binPredict(glm_a, newpred=predCV_a, col=orange, label="M1: Binary Model", quantiles=TRUE, bins = 5)
 binnedM4cv <- binPredict(glm_d, newpred=predCV_d, col=orange, label="M4: Full Model", quantiles=TRUE, bins = 5)
 
 binnedM2cv <- binPredict(glm_b, newpred=predCV_b, col=blue, label="M2: Preferences Only", quantiles=TRUE, bins = 5)
-binnedM3cv <- binPredict(glm_c, newpred=predCV_c, col=orange, label="M3: Characteristics Only", quantiles=TRUE, bins = 5)
+binnedM3cv <- binPredict(glm_c, newpred=predCV_c, col=blue, label="M3: Characteristics Only", quantiles=TRUE, bins = 5)
 
-plot(binnedM1cv, binnedM4cv, display=c("roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
-     labx=0.25, file = "figures/ROC1 - Binary vs FULL")
+plot(binnedM2cv, binnedM4cv, display=c("roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/ROC1 - Preferences vs FULL")
 
-plot(binnedM1cv, binnedM4cv, display=c("avp"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
-     labx=0.25, file = "figures/AVP1 - Binary vs FULL")
+plot(binnedM2cv, binnedM4cv, display=c("avp"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/AVP1 - Preferences vs FULL")
 
-plot(binnedM2cv, binnedM3cv, display=c("roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
-     labx=0.25, file = "figures/ROC2 - Prefs vs Characteristics")
+plot(binnedM3cv, binnedM4cv, display=c("roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/ROC2 - Characateristics vs FULL")
 
-plot(binnedM2cv, binnedM3cv, display=c("avp"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
-     labx=0.25, file = "figures/AVP2 - Prefs vs Characteristics")
+plot(binnedM3cv, binnedM4cv, display=c("avp"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/AVP2 - Characateristics vs FULL")
+
+plot(binnedM2cv, binnedM4cv, display=c("roc", "avp"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/Preferences vs FULL")
+plot(binnedM3cv, binnedM4cv, display=c("roc", "avp"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25, file = "figures/Characateristics vs FULL")
+
+
+## Testing for heterogenous age effects with vgam
+model_vgam <- farrightpref ~ immigrationpref + s(age) + incomelevel + female + education + religious + worldcitizen + nationalpride + married + domesticpartner + divorced + separated + widowed + australia + hungary #Full Model
+fit <- vgam(model_vgam, binomialff, data = wvs_final)
+summary(fit)
+pfit <- predict(fit, type = "terms", raw = TRUE, se = TRUE)
+head(pfit$fitted)
+head(pfit$se.fit)
+pfit$df
+pfit$sigma
